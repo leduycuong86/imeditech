@@ -1,0 +1,45 @@
+Comment,Designator,Footprint
+4.7uF,"C1,C6",Capacitor_Tantalum_SMD:CP_EIA-3216-10_Kemet-I
+C,"C2,C3,C5,C7",Capacitor_SMD:C_0603_1608Metric
+22uF,"C8,C9",Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder
+4.7uF,C10,Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder
+100nF,"C11,C12",Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder
+SMW250-03,CN12,Connector_JST:JST_XH_B3B-XH-AM_1x03_P2.50mm_Vertical
+RX,D1,LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder
+1N4001 M1,"D2,D3,D4,D5,D11,D12,D13,D14",Diode_SMD:D_SMA
+TX,D6,LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder
+PWR,D7,LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder
+L,D8,LED_SMD:LED_0603_1608Metric_Pad1.05x0.95mm_HandSolder
+D_Schottky,D9,Diode_SMD:D_SOD-123
+SS14,D10,Diode_SMD:D_SMA_Handsoldering
+1N4148W,D21,Diode_SMD:D_SOD-123
+XL-2012RGBC,D22,LED_SMD:LED_0805_2012Metric_Pad1.15x1.40mm_HandSolder
+MINI 5PTP,J1,Connector_USB:USB_Mini-B_Lumberg_2486_01_Horizontal
+ISP_Header,J2,Connector_PinHeader_2.54mm:PinHeader_2x03_P2.54mm_Vertical
+SMW250-04,"J3,J5",Connector_JST:JST_XA_B04B-XASK-1-A_1x04_P2.50mm_Vertical
+S2B-PH-SM4-TB(LF)(SN),J6,Connector_JST:JST_PH_S2B-PH-SM4-TB_1x02-1MP_P2.00mm_Horizontal
+SMW250-02,J8,Connector_JST:JST_XA_B02B-XASK-1-A_1x02_P2.50mm_Vertical
+APAN3105,K6,APAN3105:APAN3105
+6.8uH,L1,Inductor_SMD:L_1210_3225Metric_Pad1.42x2.65mm_HandSolder
+Yellow,"L2,L3,L4,L5",NanoV3.3:LED_0805_2012Metric
+MMBT2222LT1G,Q9,2n2222:SOT96P237X111-3N
+10k,R1,Resistor_SMD:R_0603_1608Metric
+1k,"R2,R9,R10,R11,R12,R13,R14,R15,R16,R17",Resistor_SMD:R_0603_1608Metric
+200K,R3,Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder
+10K,R4,Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder
+1K 0603,"R35,R36",Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder
+RK1631110U1Q,RV1,Potentiometer_THT:Potentiometer_Piher_PC-16_Single_Horizontal
+RESET,SW1,Button_Switch_SMD:SW_SPST_CK_RS282G05A3
+Power Mode,SW2,NanoV3.3:SW_SPST_3.9x2.9mm
+Generator Mode,SW3,NanoV3.3:SW_SPST_3.9x2.9mm
+Forward,SW4,NanoV3.3:SW_SPST_3.9x2.9mm
+Pullback,SW5,NanoV3.3:SW_SPST_3.9x2.9mm
+SW_Wuerth_450301014042,SW6,Button_Switch_THT:SW_XKB_DM1-16UD-1
+AMS1117-5.0,U1,Package_TO_SOT_SMD:SOT-223
+L298N,U2,L298:TO-220-15_P2.54x2.54mm_StaggerOdd_Lead4.58mm_Vertical
+MT3608,U3,Package_TO_SOT_SMD:SOT-23-6_Handsoldering
+ATmega328P-AU,U4,Package_QFP:TQFP-32_7x7mm_P0.8mm
+CH340G,U5,Package_SO:SOIC-16_3.9x9.9mm_P1.27mm
+PC357N3J000F,U7,pc357:SOP254P675X300-4N
+Crystal_Atmega,Y1,Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm
+12MHz Crystal,Y2,Crystal:Crystal_SMD_MicroCrystal_CC7V-T1A-2Pin_3.2x1.5mm

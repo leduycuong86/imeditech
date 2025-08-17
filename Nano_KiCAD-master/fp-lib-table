@@ -1,0 +1,8 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "NanoV3.3")(type "KiCad")(uri "${KIPRJMOD}/NanoV3.3.pretty")(options "")(descr ""))
+  (lib (name "L298")(type "KiCad")(uri "${KIPRJMOD}/Library.pretty")(options "")(descr ""))
+  (lib (name "pc357")(type "KiCad")(uri "E:/00-Taeyong/00-Kicad/01-library/PC357N3J000F/KiCad")(options "")(descr ""))
+  (lib (name "2n2222")(type "KiCad")(uri "E:/00-Taeyong/00-Kicad/01-library/MMBT2222LT1G/KiCad")(options "")(descr ""))
+  (lib (name "APAN3105")(type "KiCad")(uri "E:/00-Taeyong/00-Kicad/01-library/APAN3105/KiCad")(options "")(descr ""))
+)
