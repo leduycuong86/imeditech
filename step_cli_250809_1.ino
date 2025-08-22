@@ -18,9 +18,14 @@ const int IN4 = A1;    // PC1
 const int ENB = A0;    // PC0
 
 // Button pins
-const int BTN_FORWARD = 10;   // PB2
-const int BTN_BACKWARD = 6;   // PD6
+const int BTN_FORWARD = 10;   // PB2 SW4
+const int BTN_BACKWARD = 6;   // PD6 SW5
 const int BTN_POWER = 8;   // PB0
+
+
+// Thêm biến trạng thái cho các nút (thêm vào phần khai báo biến toàn cục)
+bool forwardButtonActive = false;  // Trạng thái nút forward
+bool backwardButtonActive = false; // Trạng thái nút backward
 
 // Buzzer pin
 const int BUZZER_PIN = 12;    // PB4
@@ -158,15 +163,38 @@ void handleButtons() {
         Serial.println(" pressed (after debounce)");
         
         switch (i) {
-          case 0: // Forward button
-            startMotor(true);
-            startForwardSound();
-            Serial.println("BTN: Forward CW");
+          case 0: // Forward button - Toggle functionality
+            if (!forwardButtonActive) {
+              // Nếu đang không hoạt động, bắt đầu chạy tiến
+              forwardButtonActive = true;
+              backwardButtonActive = false; // Tắt backward nếu đang chạy
+              startMotor(true);
+              startForwardSound();
+              Serial.println("BTN: Forward CW - START");
+            } else {
+              // Nếu đang chạy tiến, dừng lại
+              forwardButtonActive = false;
+              stopMotor();
+              stopMotionSounds();
+              Serial.println("BTN: Forward CW - STOP");
+            }
             break;
-          case 1: // Backward button
-            startMotor(false);
-            startBackwardSound();
-            Serial.println("BTN: Backward CCW");
+            
+          case 1: // Backward button - Toggle functionality
+            if (!backwardButtonActive) {
+              // Nếu đang không hoạt động, bắt đầu chạy lùi
+              backwardButtonActive = true;
+              forwardButtonActive = false; // Tắt forward nếu đang chạy
+              startMotor(false);
+              startBackwardSound();
+              Serial.println("BTN: Backward CCW - START");
+            } else {
+              // Nếu đang chạy lùi, dừng lại
+              backwardButtonActive = false;
+              stopMotor();
+              stopMotionSounds();
+              Serial.println("BTN: Backward CCW - STOP");
+            }
             break;
           case 2: // Power button
             Serial.println("Power button case reached!"); // Debug line
@@ -187,21 +215,39 @@ void handleSerialCommand(String input) {
   input.toUpperCase();
   
   // Motor commands
-  if (input == "START" || input == "F") {
+  if ( input == "F") {
+    forwardButtonActive = true;
+    backwardButtonActive = false;
     startMotor(true);
     startForwardSound();
     Serial.println("Motor: CW");
+  } else if (input == "B") {
+    backwardButtonActive = true;
+    forwardButtonActive = false;
+    startMotor(false);
+    startBackwardSound();
+    Serial.println("Motor: CCW");
   } else if (input == "STOP" || input == "S") {
+    forwardButtonActive = false;
+    backwardButtonActive = false;
     stopMotor();
     stopMotionSounds();
     Serial.println("Motor: STOP");
   } else if (input == "CW") {
     setDirection(true);
-    if (motorRunning) startForwardSound();
+    if (motorRunning) {
+      forwardButtonActive = true;
+      backwardButtonActive = false;
+      startForwardSound();
+    }
     Serial.println("Direction: CW");
-  } else if (input == "CCW" || input == "B") {
+  } else if (input == "CCW") {
     setDirection(false);
-    if (motorRunning) startBackwardSound();
+    if (motorRunning) {
+      backwardButtonActive = true;
+      forwardButtonActive = false;
+      startBackwardSound();
+    }
     Serial.println("Direction: CCW");
   } else if (input.startsWith("SPEED ")) {
     int speed = input.substring(6).toInt();
@@ -258,6 +304,10 @@ void startMotor(bool clockwise) {
 
 void stopMotor() {
   motorRunning = false;
+
+  // Reset trạng thái các nút
+  forwardButtonActive = false;
+  backwardButtonActive = false;
   
   // Turn off all motor pins
   digitalWrite(IN1, LOW);
@@ -397,7 +447,7 @@ void updateDisplay() {
   else if (backwardSoundActive) display.print("BEEP");
   else display.print("OFF");
   
-  display.print(" RLY:");
+  display.print(" Power:");
   display.print(relayOn ? "ON" : "OFF");
 
   // Line 3: System info

@@ -1,0 +1,118 @@
+sequenceDiagram
+    participant User as User/Serial
+    participant Main as Main Loop
+    participant Buttons as Button Handler
+    participant Motor as Motor Control
+    participant Relay as Relay Control
+    participant Sound as Sound System
+    participant Display as OLED Display
+    participant Buzzer as Buzzer
+
+    Note over Main: System Initialization
+    Main->>Display: Initialize OLED (0x3C/0x3D)
+    Main->>Motor: Setup motor pins (IN1-4, ENA, ENB)
+    Main->>Buttons: Setup button pins (BTN_FORWARD, BTN_BACKWARD, BTN_POWER)
+    Main->>Relay: Initialize relay (OFF)
+    Main->>Display: Show "BLDC Control"
+    
+    Note over Main: Main Loop Operation
+    loop Main Loop
+        Main->>Buttons: handleButtons()
+        Main->>Sound: handleMotionSounds()
+        Main->>Main: Check serial commands
+        
+        alt Button Press Detected
+            Buttons->>Buttons: Debounce check
+            
+            alt Forward Button (BTN_FORWARD)
+                alt Forward Not Active
+                    Buttons->>Motor: startMotor(true) - CW
+                    Buttons->>Sound: startForwardSound()
+                    Motor->>Motor: Set IN1=HIGH, IN2=LOW, IN3=HIGH, IN4=LOW
+                    Motor->>Motor: Set PWM speed on ENA, ENB
+                    Sound->>Sound: Activate tick sound
+                else Forward Active
+                    Buttons->>Motor: stopMotor()
+                    Buttons->>Sound: stopMotionSounds()
+                    Motor->>Motor: Turn off all pins
+                    Motor->>Buzzer: Double beep (stop sound)
+                end
+            
+            else Backward Button (BTN_BACKWARD)
+                alt Backward Not Active
+                    Buttons->>Motor: startMotor(false) - CCW
+                    Buttons->>Sound: startBackwardSound()
+                    Motor->>Motor: Set IN1=LOW, IN2=HIGH, IN3=LOW, IN4=HIGH
+                    Sound->>Buzzer: Continuous beep
+                else Backward Active
+                    Buttons->>Motor: stopMotor()
+                    Buttons->>Sound: stopMotionSounds()
+                end
+            
+            else Power Button (BTN_POWER)
+                Buttons->>Relay: toggleRelay()
+                alt Relay OFF
+                    Relay->>Relay: Turn ON (digitalWrite HIGH)
+                    Relay->>Buzzer: Single beep (150ms)
+                else Relay ON
+                    Relay->>Relay: Turn OFF (digitalWrite LOW)
+                    Relay->>Buzzer: Triple quick beeps (80ms each)
+                end
+            end
+            
+            Buttons->>Display: updateDisplay()
+        end
+        
+        alt Serial Command Received
+            User->>Main: Send command
+            Main->>Main: handleSerialCommand()
+            
+            alt Motor Commands
+                alt "F" - Forward
+                    Main->>Motor: startMotor(true)
+                    Main->>Sound: startForwardSound()
+                else "B" - Backward
+                    Main->>Motor: startMotor(false)
+                    Main->>Sound: startBackwardSound()
+                else "STOP" or "S"
+                    Main->>Motor: stopMotor()
+                    Main->>Sound: stopMotionSounds()
+                else "SPEED XX" or "VXX"
+                    Main->>Motor: setSpeed(value)
+                    Motor->>Motor: Update PWM if running
+                end
+            
+            else Relay Commands
+                alt "TRG" - Trigger ON
+                    Main->>Relay: turnOnRelay()
+                else "OFF" - Turn OFF
+                    Main->>Relay: turnOffRelay()
+                end
+            
+            else Status Commands
+                alt "STATUS"
+                    Main->>User: Print current status
+                else "H" or "HELP"
+                    Main->>User: Show help menu
+                end
+            end
+            
+            Main->>Display: updateDisplay()
+        end
+        
+        alt Motion Sounds Active
+            Sound->>Sound: handleMotionSounds()
+            alt Forward Sound Active
+                Sound->>Buzzer: Toggle every 200ms (tick)
+            else Backward Sound Active
+                Sound->>Buzzer: Continuous HIGH
+            else No Sound
+                Sound->>Buzzer: LOW
+            end
+        end
+    end
+    
+    Note over Display: Display Update Content
+    Display->>Display: Line 1: Motor status (CW/CCW/STOP + Speed)
+    Display->>Display: Line 2: Sound status + Relay status
+    Display->>Display: Line 3: System version info
